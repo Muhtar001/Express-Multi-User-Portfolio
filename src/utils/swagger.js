@@ -83,10 +83,10 @@ const options = {
           properties: {
             id: { type: 'string' },
             author: {
-              type: string,
+              type: 'string',
             },
             title: {
-              type: String,
+              type: 'String',
             },
             content: {
               type: 'string',
@@ -134,7 +134,7 @@ const options = {
             title: {
               type: 'string',
             },
-            description: { type: string },
+            description: { type: 'string' },
             cover: {
               type: 'string',
             },
