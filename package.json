@@ -1,0 +1,36 @@
+{
+  "name": "portfolio-server",
+  "version": "1.0.0",
+  "description": "nothing to display for now",
+  "main": "app.js",
+  "author": "Muhtar L. Efendi",
+  "license": "LGPL-3.0-or-later",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "seed": "node prisma/seed.js"
+  },
+  "dependencies": {
+    "@adminjs/express": "^6.1.0",
+    "@adminjs/prisma": "^5.0.3",
+    "@adminjs/upload": "^4.0.2",
+    "@prisma/client": "^5.14.0",
+    "adminjs": "^7.8.1",
+    "bcrypt": "^5.1.1",
+    "express": "^4.19.2",
+    "express-formidable": "^1.2.0",
+    "express-session": "^1.18.0",
+    "swagger-jsdoc": "latest",
+    "swagger-ui-express": "latest",
+    "tslib": "^2.6.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.3.0",
+    "eslint": "9.x",
+    "globals": "^15.3.0",
+    "prisma": "^5.14.0"
+  }
+}

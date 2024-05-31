@@ -1,0 +1,229 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String    @id @default(uuid())
+  username    String    @unique
+  email       String    @unique
+  password    String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  firstName   String?
+  lastName    String?
+  phoneNumber String?   @unique
+  bio         String?
+  avatar      String?
+  mimeType    String?
+  socialLinks Json?     @unique
+
+  projects        Project[]
+  services        Service[]
+  blogs           Blog[]
+  educations      Education[]
+  workExperiences WorkExperience[]
+  galleries       Gallery[]
+  documents       Document[]
+  skill           Skill[]
+  languageSkill   LanguageSkill[]
+  categories      Category[]
+
+  @@index([username])
+  @@index([firstName])
+}
+
+model Project {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  title       String
+  description String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  imageUrls   Json      @unique
+  links       Json      @unique
+
+  categories Category[]
+  tags       Tag[]
+
+  @@index([title])
+  @@index([userId])
+}
+
+model Service {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  cover       String?
+  mimeType    String?
+  title       String
+  description String
+  price       Decimal?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  duration    Float?
+
+  categories Category[]
+  tags       Tag[]
+
+  @@index([title])
+  @@index([price])
+  @@index([userId])
+}
+
+model Blog {
+  id            String    @id @default(uuid())
+  userId        String
+  author          User      @relation(fields: [userId], references: [id])
+  title         String
+  content       String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+  coverImageUrl String?   @unique
+  mimeType      String?
+  status        String    @default("Draft")
+
+  categories Category[]
+  tags       Tag[]
+
+  @@index([userId])
+  @@index([title])
+}
+
+model Category {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  description String?
+
+  projects Project[]
+  services Service[]
+  blogs    Blog[]
+  User     User?     @relation(fields: [userId], references: [id])
+  userId   String?
+
+  @@index([userId])
+  @@index([name])
+}
+
+model Tag {
+  id   String @id @default(uuid())
+  name String @unique
+
+  projects Project[]
+  services Service[]
+  blogs    Blog[]
+
+  @@index(fields: [name])
+}
+
+model Education {
+  id           String    @id @default(uuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id])
+  school       String
+  degree       String
+  fieldOfStudy String
+  startDate    DateTime
+  endDate      DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  @@index([school])
+  @@index([fieldOfStudy])
+  @@index([userId])
+}
+
+model WorkExperience {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  company     String
+  position    String
+  startDate   DateTime
+  endDate     DateTime?
+  description String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  @@index([company])
+  @@index([position])
+  @@index([userId])
+}
+
+model Skill {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  description String?
+  percentage  Float
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  @@index([name])
+  @@index([userId])
+}
+
+model LanguageSkill {
+  id          String  @id @default(uuid())
+  language    String
+  proficiency String?
+  percentage  Float?
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@index([language])
+  @@index([userId])
+}
+
+model Gallery {
+  id          String  @id @default(uuid())
+  userId      String
+  user        User    @relation(fields: [userId], references: [id])
+  title       String
+  description String?
+  mimeType    String // 'image' or 'video'
+  mediaUrl    String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([title])
+  @@index([userId])
+}
+
+model Document {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  title       String
+  description String?
+  fileUrl     String
+  mimeType    String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([title])
+  @@index([userId])
+}
